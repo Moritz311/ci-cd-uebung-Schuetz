@@ -33,4 +33,20 @@ class CalculatorTest {
         List<Integer> nums = Arrays.asList(1, 2, 3, null, 4);
         assertEquals(c.sumUp(nums), c.addAll(nums));
     }
+        @Test
+    void subtract_shouldWorkWithPositiveAndNegativeNumbers() {
+        Calculator c = new Calculator();
+        assertEquals(2, c.subtract(5, 3));     // normaler Fall
+        assertEquals(-8, c.subtract(-5, 3));   // negatives Ergebnis
+        assertEquals(8, c.subtract(5, -3));    // Minus und Minus ergibt Plus
+        assertEquals(0, c.subtract(4, 4));     // gleich große Zahlen
+    }
+
+    @Test
+    void divide_shouldReturnZeroWhenNumeratorIsZero() {
+        Calculator c = new Calculator();
+        assertEquals(0, c.divide(0, 5));       // 0 / 5 = 0
+        assertEquals(0, c.divide(0, -3));      // 0 / -3 = 0
+    }
+
 }
