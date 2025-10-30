@@ -63,3 +63,14 @@ jobs:
           path: target/site/jacoco/jacoco.xml
           if-no-files-found: warn
           retention-days: 7
+
+      - name: SonarCloud scan (only main, Ubuntu+JDK17)
+        if: >
+          github.event_name == 'push' &&
+          startsWith(github.ref, 'refs/heads/main') &&
+          matrix.os == 'ubuntu-latest' && matrix.java == 17
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B -DskipTests=false verify sonar:sonar \
+            -Dsonar.login=${SONAR_TOKEN}
