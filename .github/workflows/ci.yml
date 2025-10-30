@@ -54,3 +54,12 @@ jobs:
           path: target/surefire-reports
           if-no-files-found: warn
           retention-days: 7
+      
+      - name: Upload JaCoCo XML (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-${{ matrix.os }}-jdk${{ matrix.java }}
+          path: target/site/jacoco/jacoco.xml
+          if-no-files-found: warn
+          retention-days: 7
