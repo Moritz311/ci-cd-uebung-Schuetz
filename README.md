@@ -284,5 +284,5 @@ mvn -q -DskipTests=false test
 
 
 ## Übung 1
-- Author: Schütz Moritz
+- Author: Schütz Moritz s2310237015
 - Besonderheit: Habe mich schnell zurechtgefunden und gut lösen können. Gut das man im Semesterprojekt schon damit arbeiten muss.
