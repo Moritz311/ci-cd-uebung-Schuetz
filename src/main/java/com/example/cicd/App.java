@@ -2,6 +2,7 @@ package com.example.cicd;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App {
@@ -11,15 +12,20 @@ public class App {
     public static void main(String[] args) {
         Calculator calc = new Calculator();
         int sum = calc.add(2, 3);
-        LOGGER.info("Sum(2,3) = " + sum);
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "Sum(2,3) = {0}", sum);
+        }
 
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
         int s1 = calc.sumUp(numbers);
         int s2 = calc.addAll(numbers);
-        LOGGER.info("sumUp=" + s1 + ", addAll=" + s2);
 
-        LOGGER.info("isPalindrome('Anna')? " + TextUtils.isPalindrome("Anna"));
-        LOGGER.info("safeParseInt('42'): " + TextUtils.safeParseInt("42"));
-        LOGGER.info("safeParseInt('x'): " + TextUtils.safeParseInt("x"));
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "sumUp={0}, addAll={1}", new Object[]{s1, s2});
+            LOGGER.log(Level.INFO, "isPalindrome('Anna')? {0}", TextUtils.isPalindrome("Anna"));
+            LOGGER.log(Level.INFO, "safeParseInt('42'): {0}", TextUtils.safeParseInt("42"));
+            LOGGER.log(Level.INFO, "safeParseInt('x'): {0}", TextUtils.safeParseInt("x"));
+        }
     }
 }
