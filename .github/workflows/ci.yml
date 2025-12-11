@@ -156,4 +156,50 @@ jobs:
           path: grype-report.json
           if-no-files-found: error
           retention-days: 7
+  trivy-scan:
+    name: "Trivy scan"
+    runs-on: ubuntu-latest
+    needs: [ docker ]
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Short SHA
+        id: meta
+        run: echo "sha_short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-${{ steps.meta.outputs.sha_short }}
+          path: artifacts
+
+      - name: Load Docker image
+        run: |
+          docker load -i artifacts/docker-image-${{ steps.meta.outputs.sha_short }}.tar
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Run Trivy scan (JSON)
+        run: |
+          trivy image \
+            --format json \
+            --output trivy-report.json \
+            local/app:${{ steps.meta.outputs.sha_short }}
+
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report-${{ steps.meta.outputs.sha_short }}
+          path: trivy-report.json
+          if-no-files-found: error
+          retention-days: 7
 
